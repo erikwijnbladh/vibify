@@ -26,5 +26,60 @@ export const ExamplesSection = () => {
     preview: "Need to get into deep focus mode for important work",
     tracks: ["Ólafur Arnalds", "Max Richter", "GoGo Penguin"]
   }];
-  return;
+
+  return (
+    <section className="py-24 bg-card">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            Mood to Music Examples
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            See how your feelings transform into the perfect soundtrack
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {examples.map((example, index) => (
+            <Card key={index} className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+              <div 
+                className="h-32 relative"
+                style={{
+                  background: `linear-gradient(135deg, ${example.colors[0]}, ${example.colors[1]}, ${example.colors[2]}, ${example.colors[3]})`
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="text-lg font-bold">{example.name}</h3>
+                </div>
+              </div>
+              
+              <div className="p-6">
+                <p className="text-muted-foreground mb-4">{example.description}</p>
+                
+                <div className="text-sm bg-muted rounded-lg p-3 mb-4 italic">
+                  "{example.preview}"
+                </div>
+                
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-foreground">Featured Artists:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {example.tracks.map((artist, artistIndex) => (
+                      <span key={artistIndex} className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                        {artist}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <Button className="w-full mt-4 group-hover:bg-primary/90" size="sm">
+                  Try This Vibe
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 };
