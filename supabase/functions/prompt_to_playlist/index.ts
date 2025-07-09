@@ -51,14 +51,32 @@ serve(async (req) => {
     }
 
     // Use Vibify's dedicated Spotify account tokens (not user's tokens)
-    const spotifyAccessToken = Deno.env.get('VIBIFY_SPOTIFY_ACCESS_TOKEN')
+    let spotifyAccessToken = Deno.env.get('VIBIFY_SPOTIFY_ACCESS_TOKEN')
     const spotifyRefreshToken = Deno.env.get('VIBIFY_SPOTIFY_REFRESH_TOKEN')
 
-    if (!spotifyAccessToken) {
+    if (!spotifyAccessToken || !spotifyRefreshToken) {
       return new Response(
         JSON.stringify({ error: 'Vibify Spotify credentials not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
+    }
+
+    // Test if token is valid, refresh if needed
+    const tokenTestResponse = await fetch('https://api.spotify.com/v1/me', {
+      headers: { 'Authorization': `Bearer ${spotifyAccessToken}` }
+    })
+
+    if (!tokenTestResponse.ok) {
+      // Token expired, refresh it
+      const refreshResponse = await refreshSpotifyToken(spotifyRefreshToken)
+      if (refreshResponse.success) {
+        spotifyAccessToken = refreshResponse.access_token
+      } else {
+        return new Response(
+          JSON.stringify({ error: 'Failed to refresh Vibify Spotify token' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
     }
 
     // Step 1: AI Analysis of the prompt
@@ -247,4 +265,40 @@ async function createSpotifyPlaylist(
   }
 
   return playlist
+}
+
+async function refreshSpotifyToken(refreshToken: string) {
+  const clientId = Deno.env.get('SPOTIFY_CLIENT_ID')
+  const clientSecret = Deno.env.get('SPOTIFY_CLIENT_SECRET')
+  
+  if (!clientId || !clientSecret) {
+    return { success: false, error: 'Spotify credentials not configured' }
+  }
+
+  try {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`
+      },
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken
+      })
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return { 
+        success: true, 
+        access_token: data.access_token,
+        refresh_token: data.refresh_token || refreshToken // Use new refresh token if provided
+      }
+    } else {
+      return { success: false, error: 'Failed to refresh token' }
+    }
+  } catch (error) {
+    return { success: false, error: error.message }
+  }
 } 
