@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { Music, Sparkles } from "lucide-react";
 
@@ -9,6 +12,9 @@ const Auth = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -36,23 +42,53 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleSpotifyAuth = async () => {
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      setMessage("Please fill in all fields");
+      return;
+    }
+
     setLoading(true);
+    setMessage("");
     
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'spotify',
-        options: {
-          scopes: 'playlist-modify-private playlist-modify-public user-read-private user-read-email',
-          redirectTo: `${window.location.origin}/authenticated`
-        }
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
       if (error) {
-        alert(`Authentication failed: ${error.message}`);
+        setMessage(error.message);
       }
     } catch (error) {
-      alert(`Something went wrong: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setMessage(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignUp = async () => {
+    if (!email || !password) {
+      setMessage("Please fill in all fields");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+    
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        setMessage(error.message);
+      } else {
+        setMessage("Check your email for the confirmation link!");
+      }
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -95,10 +131,10 @@ const Auth = () => {
           ) : (
             <>
               <h1 className="text-3xl font-bold text-foreground mb-2">
-                Connect to Spotify
+                Welcome to Vibify
               </h1>
               <p className="text-muted-foreground">
-                Sign in with your Spotify account to start creating personalized playlists
+                Sign in to start creating personalized playlists with AI
               </p>
             </>
           )}
@@ -140,14 +176,81 @@ const Auth = () => {
             </Button>
           </div>
         ) : (
-          <Button 
-            onClick={handleSpotifyAuth}
-            disabled={loading}
-            className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
-            size="lg"
-          >
-            {loading ? "Connecting..." : "Continue with Spotify"}
-          </Button>
+          <Tabs defaultValue="signin" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
+            <TabsContent value="signin" className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+              <Button 
+                onClick={handleSignIn}
+                disabled={loading}
+                className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
+                size="lg"
+              >
+                {loading ? "Signing In..." : "Sign In"}
+              </Button>
+            </TabsContent>
+            <TabsContent value="signup" className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+              <Button 
+                onClick={handleSignUp}
+                disabled={loading}
+                className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
+                size="lg"
+              >
+                {loading ? "Creating Account..." : "Create Account"}
+              </Button>
+            </TabsContent>
+            {message && (
+              <div className={`text-sm mt-4 ${message.includes('Check your email') ? 'text-green-600' : 'text-red-600'}`}>
+                {message}
+              </div>
+            )}
+          </Tabs>
         )}
 
         <p className="text-xs text-muted-foreground mt-4">
