@@ -32,7 +32,7 @@ const Auth = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === 'SIGNED_IN' && session) {
-          navigate('/authenticated');
+          navigate('/dashboard');
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
         }
@@ -106,34 +106,39 @@ const Auth = () => {
   };
 
   const handleContinue = () => {
-    navigate('/authenticated');
+    navigate('/dashboard');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
-      <Card className="w-full max-w-md p-8 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-black text-white p-4 relative">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black opacity-80"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.03)_0%,transparent_60%)]"></div>
+      
+      <Card className="w-full max-w-md p-8 text-center bg-white/5 border-white/10 backdrop-blur-sm relative z-10">
         <div className="mb-6">
-          <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Music className="w-10 h-10 text-primary" />
+          <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
+            <Music className="w-10 h-10 text-white" />
           </div>
           {user ? (
             <>
-              <h1 className="text-3xl font-bold text-foreground mb-2">
+              <h1 className="text-3xl font-bold text-white mb-2">
                 Already Signed In
               </h1>
-              <p className="text-muted-foreground mb-4">
-                You're currently signed in as <strong>{user.email}</strong>
+              <p className="text-white/70 mb-4">
+                You're currently signed in as <strong className="text-white">{user.email}</strong>
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-white/60">
                 Continue to your dashboard or sign out to use a different account
               </p>
             </>
           ) : (
             <>
-              <h1 className="text-3xl font-bold text-foreground mb-2">
+              <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome to Vibify
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-white/70">
                 Sign in to start creating personalized playlists with AI
               </p>
             </>
@@ -141,16 +146,16 @@ const Auth = () => {
         </div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex items-center gap-3 text-sm text-muted-foreground">
-            <Sparkles className="w-4 h-4 text-primary" />
+          <div className="flex items-center gap-3 text-sm text-white/70">
+            <Sparkles className="w-4 h-4 text-white" />
             <span>Create unlimited playlists</span>
           </div>
-          <div className="flex items-center gap-3 text-sm text-muted-foreground">
-            <Sparkles className="w-4 h-4 text-primary" />
+          <div className="flex items-center gap-3 text-sm text-white/70">
+            <Sparkles className="w-4 h-4 text-white" />
             <span>AI-powered mood matching</span>
           </div>
-          <div className="flex items-center gap-3 text-sm text-muted-foreground">
-            <Sparkles className="w-4 h-4 text-primary" />
+          <div className="flex items-center gap-3 text-sm text-white/70">
+            <Sparkles className="w-4 h-4 text-white" />
             <span>Seamless Spotify integration</span>
           </div>
         </div>
@@ -160,7 +165,7 @@ const Auth = () => {
             <Button 
               onClick={handleContinue}
               disabled={loading}
-              className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
+              className="w-full bg-white text-black hover:bg-white/90 font-semibold py-3 transition-all duration-300 hover:scale-105 disabled:hover:scale-100"
               size="lg"
             >
               Continue to Dashboard
@@ -169,7 +174,7 @@ const Auth = () => {
               onClick={handleSignOut}
               disabled={loading}
               variant="outline"
-              className="w-full"
+              className="w-full border-white/20 text-black hover:bg-white/10 hover:border-white/30"
               size="lg"
             >
               {loading ? "Signing out..." : "Sign Out & Use Different Account"}
@@ -177,13 +182,13 @@ const Auth = () => {
           </div>
         ) : (
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-white/5 border-white/10">
+              <TabsTrigger value="signin" className="text-white data-[state=active]:bg-white/10 data-[state=active]:text-white">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="text-white data-[state=active]:bg-white/10 data-[state=active]:text-white">Sign Up</TabsTrigger>
             </TabsList>
             <TabsContent value="signin" className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-white">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -191,10 +196,11 @@ const Auth = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
+                  className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-white/40 focus:ring-white/20"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-white">Password</Label>
                 <Input
                   id="password"
                   type="password"
@@ -202,12 +208,13 @@ const Auth = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
+                  className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-white/40 focus:ring-white/20"
                 />
               </div>
               <Button 
                 onClick={handleSignIn}
                 disabled={loading}
-                className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
+                className="w-full bg-white text-black hover:bg-white/90 font-semibold py-3 transition-all duration-300 hover:scale-105 disabled:hover:scale-100"
                 size="lg"
               >
                 {loading ? "Signing In..." : "Sign In"}
@@ -215,7 +222,7 @@ const Auth = () => {
             </TabsContent>
             <TabsContent value="signup" className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-white">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -223,10 +230,11 @@ const Auth = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
+                  className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-white/40 focus:ring-white/20"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-white">Password</Label>
                 <Input
                   id="password"
                   type="password"
@@ -234,26 +242,27 @@ const Auth = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
+                  className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-white/40 focus:ring-white/20"
                 />
               </div>
               <Button 
                 onClick={handleSignUp}
                 disabled={loading}
-                className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
+                className="w-full bg-white text-black hover:bg-white/90 font-semibold py-3 transition-all duration-300 hover:scale-105 disabled:hover:scale-100"
                 size="lg"
               >
                 {loading ? "Creating Account..." : "Create Account"}
               </Button>
             </TabsContent>
             {message && (
-              <div className={`text-sm mt-4 ${message.includes('Check your email') ? 'text-green-600' : 'text-red-600'}`}>
+              <div className={`text-sm mt-4 ${message.includes('Check your email') ? 'text-green-400' : 'text-red-400'}`}>
                 {message}
               </div>
             )}
           </Tabs>
         )}
 
-        <p className="text-xs text-muted-foreground mt-4">
+        <p className="text-xs text-white/50 mt-4">
           By continuing, you agree to our terms of service and privacy policy
         </p>
       </Card>
