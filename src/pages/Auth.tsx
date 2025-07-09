@@ -38,7 +38,6 @@ const Auth = () => {
     setLoading(true);
     
     try {
-      console.log('Starting Spotify authentication...');
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'spotify',
         options: {
@@ -47,16 +46,10 @@ const Auth = () => {
         }
       });
 
-      console.log('Auth response:', { data, error });
-
       if (error) {
-        console.error('Error during authentication:', error);
         alert(`Authentication failed: ${error.message}`);
-      } else {
-        console.log('Redirecting to Spotify...');
       }
     } catch (error) {
-      console.error('Unexpected error:', error);
       alert(`Something went wrong: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);

@@ -55,8 +55,6 @@ serve(async (req) => {
     const spotifyAccessToken = user.user_metadata?.provider_token || spotify_token
     const spotifyRefreshToken = user.user_metadata?.provider_refresh_token
 
-    console.log('Token sources - metadata:', !!user.user_metadata?.provider_token, 'request:', !!spotify_token, 'final:', !!spotifyAccessToken)
-
     if (!spotifyAccessToken) {
       return new Response(
         JSON.stringify({ error: 'No Spotify access token found in user metadata or request' }),
@@ -64,15 +62,11 @@ serve(async (req) => {
       )
     }
 
-    console.log('Processing prompt:', prompt)
-
     // Step 1: AI Analysis of the prompt
     const analysis = await analyzePromptWithAI(prompt)
-    console.log('AI Analysis:', analysis)
 
     // Step 2: Search for tracks based on AI analysis
     const tracks = await searchSpotifyTracks(analysis, spotifyAccessToken)
-    console.log('Found tracks:', tracks.length)
 
     // Step 3: Create playlist
     const playlist = await createSpotifyPlaylist(

@@ -19,8 +19,6 @@ const CreatePlaylist = () => {
     setResult(null);
 
     try {
-      console.log('Creating playlist with prompt:', prompt);
-      
       // Get current user session to access Spotify tokens
       const { data: { session } } = await supabase.auth.getSession();
       
