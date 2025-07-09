@@ -34,13 +34,14 @@ const vibifyPlans = [{
   href: "/contact",
   isPopular: false
 }];
+const year = new Date().getFullYear();
 const Index = () => {
   return <div className="min-h-screen">
       <HeroSection />
       <PipelineSection />
-      <ExamplesSection />
+      {/* <ExamplesSection /> */}
       <FeaturesSection />
-      <Pricing plans={vibifyPlans} title="Choose Your Vibify Plan" description="Transform your music discovery with AI-powered playlist generation. All plans include our core mood intelligence and continuous music updates." />
+      {/* <Pricing plans={vibifyPlans} title="Choose Your Vibify Plan" description="Transform your music discovery with AI-powered playlist generation. All plans include our core mood intelligence and continuous music updates." /> */}
       
       {/* CTA Section */}
       
@@ -54,7 +55,7 @@ const Index = () => {
               <p className="text-muted-foreground mb-6 max-w-md">
                 AI-powered playlist generator that transforms your mood and moments into the perfect soundtrack for every occasion.
               </p>
-              <div className="flex gap-4">
+              {/* <div className="flex gap-4">
                 <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground p-2">
                   <Twitter className="w-5 h-5" />
                 </Button>
@@ -64,16 +65,11 @@ const Index = () => {
                 <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground p-2">
                   <Mail className="w-5 h-5" />
                 </Button>
-              </div>
+              </div> */}
             </div>
-            
-            
-            
-            
           </div>
-          
           <div className="border-t border-border mt-12 pt-8 text-center text-muted-foreground">
-            <p>&copy; 2024 Vibify. All rights reserved. Music made personal.</p>
+            <p>&copy; {year} Vibify. All rights reserved. Music made personal.</p>
           </div>
         </div>
       </footer>

@@ -12,19 +12,7 @@ export const FeaturesSection = () => {
   }, {
     icon: Zap,
     title: "Instant Creation",
-    description: "Generate personalized playlists in seconds with smart song transitions and perfect flow progression."
-  }, {
-    icon: Users,
-    title: "Social Sharing",
-    description: "Share your vibes with friends, discover new music through community playlists, and build musical connections."
-  }, {
-    icon: Share,
-    title: "Spotify Integration",
-    description: "Seamless sync with your Spotify account, automatic playlist creation, and offline listening capabilities."
-  }, {
-    icon: Repeat,
-    title: "Smart Learning",
-    description: "AI learns from your feedback and listening patterns to continuously improve your personalized recommendations."
+    description: "Generate personalized playlists in seconds, ready for you to enjoy!"
   }];
 
   return (

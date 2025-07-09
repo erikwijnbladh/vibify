@@ -168,12 +168,37 @@ const CreatePlaylist = () => {
 
           {/* Examples */}
           <div className="mt-8 pt-6 border-t border-border">
-            <h4 className="text-sm font-semibold text-muted-foreground mb-3">Example prompts:</h4>
-            <div className="grid gap-2 text-sm text-muted-foreground">
-              <div>• "Energetic electronic music for a morning run"</div>
-              <div>• "Cozy acoustic songs for reading by the fireplace"</div>
-              <div>• "90s hip-hop classics for a road trip"</div>
-              <div>• "Dreamy shoegaze for studying late at night"</div>
+            <h4 className="text-sm font-semibold text-muted-foreground mb-4">✨ Get creative with your prompts:</h4>
+            <div className="grid gap-3 text-sm">
+              <div className="flex items-start gap-2">
+                <span className="text-blue-500 font-medium">🏃‍♂️</span>
+                <span className="text-muted-foreground">"High-energy EDM and rock for crushing my morning workout"</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-amber-500 font-medium">🔥</span>
+                <span className="text-muted-foreground">"Cozy indie folk and jazz for a rainy Sunday with coffee and books"</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-purple-500 font-medium">🌙</span>
+                <span className="text-muted-foreground">"Melancholic lo-fi and ambient tracks for 3am coding sessions"</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-green-500 font-medium">🚗</span>
+                <span className="text-muted-foreground">"Classic rock and 90s hits for an epic cross-country road trip"</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-pink-500 font-medium">💕</span>
+                <span className="text-muted-foreground">"Romantic ballads and smooth R&B for a dinner date at home"</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-orange-500 font-medium">🎨</span>
+                <span className="text-muted-foreground">"Experimental electronic and post-rock for creative inspiration"</span>
+              </div>
+            </div>
+            <div className="mt-4 p-3 bg-primary/5 rounded-lg">
+              <p className="text-xs text-muted-foreground">
+                💡 <strong>Tip:</strong> Be specific about mood, activity, genre, or even time of day. Our AI understands context and creates playlists that perfectly match your vibe!
+              </p>
             </div>
           </div>
         </Card>
