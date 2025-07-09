@@ -10,7 +10,7 @@ const vibifyPlans = [{
   name: "FREE",
   price: "0",
   period: "month",
-  features: ["5 playlist generations per month", "Basic mood analysis", "Instant following", "Community sharing", "Standard recommendations"],
+  features: ["5 playlist generations per month", "Basic mood analysis", "Spotify export", "Community sharing", "Standard recommendations"],
   description: "Perfect for casual listeners exploring new music",
   buttonText: "Start Free",
   href: "/sign-up",

@@ -18,9 +18,9 @@ export const PipelineSection = () => {
     example: "20-50 songs with perfect mood progression"
   }, {
     icon: Download,
-    title: "Ready to Follow",
-    description: "We create a public playlist you can instantly follow and share - no Spotify account required",
-    example: "Follow on Spotify or share the link"
+    title: "Export to Spotify",
+    description: "Instantly save to your Spotify account or share with friends via playlist links",
+    example: "Direct Spotify integration and sharing"
   }];
 
   return (

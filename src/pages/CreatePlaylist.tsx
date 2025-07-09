@@ -63,42 +63,33 @@ const CreatePlaylist = () => {
   };
 
   return (
-    <div className="min-h-screen animated-gradient p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-4">
       {/* Header */}
       <header className="max-w-4xl mx-auto mb-8 pt-4">
-        <div className="glass-card rounded-2xl p-6 transition-smooth">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={goBack}
-              className="glass-card text-white border-white/20 hover:bg-white/20"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                <Music className="w-6 h-6 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-white">Create AI Playlist</h1>
-            </div>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={goBack}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+          <div className="flex items-center gap-3">
+            <Music className="w-8 h-8 text-primary" />
+            <h1 className="text-2xl font-bold">Create AI Playlist</h1>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto">
-        <Card className="glass-card p-10 shadow-glow">
+        <Card className="p-8">
           <div className="text-center mb-8">
-            <div className="w-24 h-24 bg-white/20 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-glow">
-              <Sparkles className="w-12 h-12 text-white" />
+            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="w-10 h-10 text-primary" />
             </div>
-            <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
+            <h2 className="text-3xl font-bold text-foreground mb-2">
               Describe Your Vibe
             </h2>
-            <p className="text-white/80 text-lg leading-relaxed">
-              Tell us what kind of music you're in the mood for, and our AI will create a public playlist that you can instantly follow on Spotify
+            <p className="text-muted-foreground">
+              Tell us what kind of music you're in the mood for, and our AI will create the perfect public playlist for you to follow
             </p>
           </div>
 
@@ -108,7 +99,7 @@ const CreatePlaylist = () => {
                 placeholder="e.g., 'chill indie songs for a rainy Sunday morning' or 'upbeat pop for working out' or 'melancholic folk for late night coding'"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[140px] text-lg glass-card text-white placeholder:text-white/60 border-white/20 focus:border-white/40 resize-none"
+                className="min-h-[120px] text-lg"
                 disabled={loading}
               />
             </div>
@@ -116,17 +107,17 @@ const CreatePlaylist = () => {
             <Button 
               onClick={handleCreatePlaylist}
               disabled={!prompt.trim() || loading}
-              className="w-full bg-white/20 hover:bg-white/30 text-white font-semibold py-4 text-lg rounded-2xl backdrop-blur-sm border border-white/20 transition-smooth shadow-elegant"
+              className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
               size="lg"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-6 h-6 mr-3 animate-spin" />
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                   Creating Your Playlist...
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-6 h-6 mr-3" />
+                  <Sparkles className="w-5 h-5 mr-2" />
                   Generate Playlist
                 </>
               )}
@@ -134,23 +125,23 @@ const CreatePlaylist = () => {
 
             {/* Result Display */}
             {result && (
-              <Card className={`glass-card p-8 ${result.success ? 'border-green-400/30 bg-green-500/10' : 'border-red-400/30 bg-red-500/10'} shadow-glow`}>
+              <Card className={`p-6 ${result.success ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
                 {result.success ? (
                   <div className="text-center">
-                    <div className="w-20 h-20 bg-green-400/20 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                      <Music className="w-10 h-10 text-green-300" />
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Music className="w-8 h-8 text-green-600" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-3">
+                    <h3 className="text-xl font-bold text-green-800 mb-2">
                       Playlist Created! 🎉
                     </h3>
-                    <p className="text-white/90 mb-4 text-lg">
+                    <p className="text-green-700 mb-4">
                       "{result.playlist.name}" with {result.playlist.trackCount} tracks
                     </p>
-                    <p className="text-white/70 mb-6">
+                    <p className="text-sm text-green-600 mb-4">
                       Created by @VibifyMusic • {result.playlist.description}
                     </p>
                     <Button 
-                      className="bg-green-500/30 hover:bg-green-500/40 text-white border border-green-400/30 backdrop-blur-sm transition-smooth px-8 py-3 rounded-xl"
+                      className="bg-green-600 hover:bg-green-700 text-white"
                       onClick={() => window.open(`https://open.spotify.com/playlist/${result.playlist.id}`, '_blank')}
                     >
                       Open in Spotify
@@ -158,13 +149,10 @@ const CreatePlaylist = () => {
                   </div>
                 ) : (
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-red-400/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <Music className="w-8 h-8 text-red-300" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">
+                    <h3 className="text-xl font-bold text-red-800 mb-2">
                       Failed to Create Playlist
                     </h3>
-                    <p className="text-white/80">
+                    <p className="text-red-700">
                       {result.error}
                     </p>
                   </div>
@@ -174,37 +162,37 @@ const CreatePlaylist = () => {
           </div>
 
           {/* Examples */}
-          <div className="mt-8 pt-8 border-t border-white/20">
-            <h4 className="text-lg font-semibold text-white mb-6">✨ Get creative with your prompts:</h4>
-            <div className="grid gap-4">
-              <div className="flex items-start gap-3 glass-card p-4 rounded-xl">
-                <span className="text-2xl">🏃‍♂️</span>
-                <span className="text-white/80">"High-energy EDM and rock for crushing my morning workout"</span>
+          <div className="mt-8 pt-6 border-t border-border">
+            <h4 className="text-sm font-semibold text-muted-foreground mb-4">✨ Get creative with your prompts:</h4>
+            <div className="grid gap-3 text-sm">
+              <div className="flex items-start gap-2">
+                <span className="text-blue-500 font-medium">🏃‍♂️</span>
+                <span className="text-muted-foreground">"High-energy EDM and rock for crushing my morning workout"</span>
               </div>
-              <div className="flex items-start gap-3 glass-card p-4 rounded-xl">
-                <span className="text-2xl">🔥</span>
-                <span className="text-white/80">"Cozy indie folk and jazz for a rainy Sunday with coffee and books"</span>
+              <div className="flex items-start gap-2">
+                <span className="text-amber-500 font-medium">🔥</span>
+                <span className="text-muted-foreground">"Cozy indie folk and jazz for a rainy Sunday with coffee and books"</span>
               </div>
-              <div className="flex items-start gap-3 glass-card p-4 rounded-xl">
-                <span className="text-2xl">🌙</span>
-                <span className="text-white/80">"Melancholic lo-fi and ambient tracks for 3am coding sessions"</span>
+              <div className="flex items-start gap-2">
+                <span className="text-purple-500 font-medium">🌙</span>
+                <span className="text-muted-foreground">"Melancholic lo-fi and ambient tracks for 3am coding sessions"</span>
               </div>
-              <div className="flex items-start gap-3 glass-card p-4 rounded-xl">
-                <span className="text-2xl">🚗</span>
-                <span className="text-white/80">"Classic rock and 90s hits for an epic cross-country road trip"</span>
+              <div className="flex items-start gap-2">
+                <span className="text-green-500 font-medium">🚗</span>
+                <span className="text-muted-foreground">"Classic rock and 90s hits for an epic cross-country road trip"</span>
               </div>
-              <div className="flex items-start gap-3 glass-card p-4 rounded-xl">
-                <span className="text-2xl">💕</span>
-                <span className="text-white/80">"Romantic ballads and smooth R&B for a dinner date at home"</span>
+              <div className="flex items-start gap-2">
+                <span className="text-pink-500 font-medium">💕</span>
+                <span className="text-muted-foreground">"Romantic ballads and smooth R&B for a dinner date at home"</span>
               </div>
-              <div className="flex items-start gap-3 glass-card p-4 rounded-xl">
-                <span className="text-2xl">🎨</span>
-                <span className="text-white/80">"Experimental electronic and post-rock for creative inspiration"</span>
+              <div className="flex items-start gap-2">
+                <span className="text-orange-500 font-medium">🎨</span>
+                <span className="text-muted-foreground">"Experimental electronic and post-rock for creative inspiration"</span>
               </div>
             </div>
-            <div className="mt-6 glass-card p-5 rounded-2xl">
-              <p className="text-white/70 leading-relaxed">
-                💡 <strong className="text-white">Tip:</strong> Be specific about mood, activity, genre, or even time of day. Our AI understands context and creates playlists that perfectly match your vibe!
+            <div className="mt-4 p-3 bg-primary/5 rounded-lg">
+              <p className="text-xs text-muted-foreground">
+                💡 <strong>Tip:</strong> Be specific about mood, activity, genre, or even time of day. Our AI understands context and creates playlists that perfectly match your vibe!
               </p>
             </div>
           </div>

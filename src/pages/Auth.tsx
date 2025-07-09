@@ -151,7 +151,7 @@ const Auth = () => {
           </div>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span>Follow playlists instantly</span>
+            <span>Seamless Spotify integration</span>
           </div>
         </div>
 
