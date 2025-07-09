@@ -271,7 +271,10 @@ async function refreshSpotifyToken(refreshToken: string) {
   const clientId = Deno.env.get('SPOTIFY_CLIENT_ID')
   const clientSecret = Deno.env.get('SPOTIFY_CLIENT_SECRET')
   
+  console.log('Refresh token attempt - clientId exists:', !!clientId, 'clientSecret exists:', !!clientSecret)
+  
   if (!clientId || !clientSecret) {
+    console.error('Missing Spotify credentials - clientId:', !!clientId, 'clientSecret:', !!clientSecret)
     return { success: false, error: 'Spotify credentials not configured' }
   }
 
@@ -288,17 +291,23 @@ async function refreshSpotifyToken(refreshToken: string) {
       })
     })
 
+    console.log('Spotify refresh response status:', response.status)
+
     if (response.ok) {
       const data = await response.json()
+      console.log('Token refresh successful')
       return { 
         success: true, 
         access_token: data.access_token,
         refresh_token: data.refresh_token || refreshToken // Use new refresh token if provided
       }
     } else {
-      return { success: false, error: 'Failed to refresh token' }
+      const errorData = await response.text()
+      console.error('Spotify refresh failed with status:', response.status, 'error:', errorData)
+      return { success: false, error: `Failed to refresh token: ${response.status} - ${errorData}` }
     }
   } catch (error) {
+    console.error('Token refresh exception:', error)
     return { success: false, error: error.message }
   }
 } 
