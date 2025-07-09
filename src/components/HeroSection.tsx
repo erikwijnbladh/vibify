@@ -1,7 +1,14 @@
 import { LavaLamp } from "@/components/ui/fluid-blob";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 export const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleCreatePlaylist = () => {
+    navigate('/auth');
+  };
+
   return <div className="h-screen w-screen flex flex-col justify-center items-center relative">
       <LavaLamp />
       <h1 className="text-6xl md:text-8xl font-bold tracking-tight mix-blend-exclusion text-white whitespace-nowrap">
@@ -12,7 +19,11 @@ export const HeroSection = () => {
       </p>
       
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
-        <Button size="lg" className="bg-white text-black hover:bg-gray-100 font-semibold px-8 py-4 text-lg group mix-blend-exclusion">
+        <Button 
+          size="lg" 
+          className="bg-white text-black hover:bg-gray-100 font-semibold px-8 py-4 text-lg group mix-blend-exclusion"
+          onClick={handleCreatePlaylist}
+        >
           Create Playlist
           <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
         </Button>
