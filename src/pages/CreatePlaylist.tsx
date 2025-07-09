@@ -39,6 +39,24 @@ const CreatePlaylist = () => {
       }
 
       if (data.success) {
+        // Store the playlist in the database
+        const { error: dbError } = await (supabase as any)
+          .from('playlists')
+          .insert({
+            user_id: session.user.id,
+            prompt: prompt.trim(),
+            playlist_name: data.playlist.name,
+            playlist_description: data.playlist.description || '',
+            spotify_playlist_id: data.playlist.id,
+            track_count: data.playlist.trackCount || 0,
+            spotify_url: `https://open.spotify.com/playlist/${data.playlist.id}`
+          });
+
+        if (dbError) {
+          console.error('Error saving playlist to database:', dbError);
+          // Still show success to user, but log the error
+        }
+
         setResult({
           success: true,
           playlist: data.playlist

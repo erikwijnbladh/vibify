@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Music, User, LogOut, Home, Sparkles } from "lucide-react";
+import { Music, User, LogOut, Home, Sparkles, Crown, History } from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,6 +18,15 @@ const Dashboard = () => {
         navigate('/auth');
       } else {
         setUser(user);
+        
+        // Check if user is admin
+        const { data: profile } = await (supabase as any)
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single();
+        
+        setIsAdmin(profile?.is_admin || false);
       }
       setLoading(false);
     };
@@ -42,6 +52,14 @@ const Dashboard = () => {
 
   const goToCreatePlaylist = () => {
     navigate('/create-playlist');
+  };
+
+  const goToMyPlaylists = () => {
+    navigate('/my-playlists');
+  };
+
+  const goToAdmin = () => {
+    navigate('/admin');
   };
 
   if (loading) {
@@ -136,31 +154,77 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        {/* Create Playlist Section */}
-        <Card className="p-8 text-center bg-white/5 border-white/10 backdrop-blur-sm relative overflow-hidden">
-          {/* Subtle glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-50"></div>
-          <div className="relative z-10">
-            <h3 className="text-2xl font-bold mb-4 text-white">🎵 Ready to Create?</h3>
-            <p className="text-lg text-white/70 mb-6">
-              Describe your mood and let our AI create the perfect playlist for you!
-            </p>
-            <Button 
-              size="lg" 
-              className="bg-white text-black hover:bg-white/90 font-semibold px-8 py-3 transition-all duration-300 hover:scale-105"
-              onClick={goToCreatePlaylist}
-            >
-              <Sparkles className="w-5 h-5 mr-2" />
-              Create AI Playlist
-            </Button>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 mt-6">
-              <span>• Natural language prompts</span>
-              <span>• AI-powered analysis</span>
-              <span>• Smart music curation</span>
-              <span>• Direct Spotify integration</span>
+        {/* Action Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {/* Create Playlist Card */}
+          <Card className="p-8 text-center bg-white/5 border-white/10 backdrop-blur-sm relative overflow-hidden hover:bg-white/10 transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-50"></div>
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold mb-4 text-white">🎵 Ready to Create?</h3>
+              <p className="text-lg text-white/70 mb-6">
+                Describe your mood and let our AI create the perfect playlist for you!
+              </p>
+              <Button 
+                size="lg" 
+                className="bg-white text-black hover:bg-white/90 font-semibold px-8 py-3 transition-all duration-300 hover:scale-105"
+                onClick={goToCreatePlaylist}
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Create AI Playlist
+              </Button>
             </div>
-          </div>
-        </Card>
+          </Card>
+
+          {/* My Playlists Card */}
+          <Card className="p-8 text-center bg-white/5 border-white/10 backdrop-blur-sm relative overflow-hidden hover:bg-white/10 transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-50"></div>
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold mb-4 text-white">📚 Your Collection</h3>
+              <p className="text-lg text-white/70 mb-6">
+                Browse and revisit all your AI-generated playlists
+              </p>
+              <Button 
+                size="lg" 
+                className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-semibold px-8 py-3 transition-all duration-300 hover:scale-105"
+                onClick={goToMyPlaylists}
+              >
+                <History className="w-5 h-5 mr-2" />
+                View My Playlists
+              </Button>
+            </div>
+          </Card>
+        </div>
+
+        {/* Admin Access */}
+        {isAdmin && (
+          <Card className="p-6 text-center bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-amber-500/20 backdrop-blur-sm relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-transparent to-orange-500/5 opacity-50"></div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Crown className="w-6 h-6 text-amber-400" />
+                <h3 className="text-xl font-bold text-amber-300">Admin Access</h3>
+              </div>
+              <p className="text-amber-200/80 mb-4">
+                View analytics, user data, and system statistics
+              </p>
+              <Button 
+                onClick={goToAdmin}
+                className="bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 font-semibold transition-all duration-300 hover:scale-105"
+              >
+                <Crown className="w-4 h-4 mr-2" />
+                Admin Dashboard
+              </Button>
+            </div>
+          </Card>
+        )}
+
+        {/* Features Info */}
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 mt-6">
+          <span>• Natural language prompts</span>
+          <span>• AI-powered analysis</span>
+          <span>• Smart music curation</span>
+          <span>• Direct Spotify integration</span>
+        </div>
       </div>
     </div>
   );
