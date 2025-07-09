@@ -24,13 +24,21 @@ const CreatePlaylist = () => {
       // Get current user session to access Spotify tokens
       const { data: { session } } = await supabase.auth.getSession();
       
-      if (!session?.provider_token) {
-        throw new Error('No Spotify access token found. Please re-authenticate.');
+      // Check for tokens in different possible locations
+      const spotifyToken = session?.provider_token || 
+                          session?.user?.user_metadata?.provider_token ||
+                          session?.user?.app_metadata?.provider_token;
+      
+      if (!spotifyToken) {
+        throw new Error('No Spotify access token found. Please re-authenticate with Spotify.');
       }
 
       // Call the Supabase Edge Function for AI-powered playlist creation
       const { data, error } = await supabase.functions.invoke('prompt_to_playlist', {
-        body: { prompt }
+        body: { 
+          prompt: prompt.trim(),
+          spotify_token: spotifyToken
+        }
       });
 
       if (error) {

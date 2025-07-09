@@ -35,12 +35,13 @@ const Authenticated = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
     await supabase.auth.signOut();
+    navigate('/');
   };
 
-  const goHome = () => {
-    navigate('/');
+  const goToCreatePlaylist = () => {
+    navigate('/create-playlist');
   };
 
   if (loading) {
@@ -61,18 +62,11 @@ const Authenticated = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Music className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl font-bold">Vibify</h1>
+            <h1 className="text-2xl font-bold">Vibify Dashboard</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={goHome}>
-              <Home className="w-4 h-4 mr-2" />
-              Home
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
+          <Button variant="outline" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
       </header>
 
@@ -137,7 +131,7 @@ const Authenticated = () => {
           <Button 
             size="lg" 
             className="bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold px-8 py-3"
-            onClick={() => navigate('/create-playlist')}
+            onClick={goToCreatePlaylist}
           >
             <Sparkles className="w-5 h-5 mr-2" />
             Create AI Playlist

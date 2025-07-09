@@ -8,6 +8,7 @@ const corsHeaders = {
 
 interface PlaylistRequest {
   prompt: string;
+  spotify_token?: string;
 }
 
 interface SpotifyTrack {
@@ -41,7 +42,7 @@ serve(async (req) => {
       )
     }
 
-    const { prompt }: PlaylistRequest = await req.json()
+    const { prompt, spotify_token }: PlaylistRequest = await req.json()
 
     if (!prompt) {
       return new Response(
@@ -50,13 +51,15 @@ serve(async (req) => {
       )
     }
 
-    // Get Spotify tokens from user metadata
-    const spotifyAccessToken = user.user_metadata?.provider_token
+    // Get Spotify tokens from user metadata or request body
+    const spotifyAccessToken = user.user_metadata?.provider_token || spotify_token
     const spotifyRefreshToken = user.user_metadata?.provider_refresh_token
+
+    console.log('Token sources - metadata:', !!user.user_metadata?.provider_token, 'request:', !!spotify_token, 'final:', !!spotifyAccessToken)
 
     if (!spotifyAccessToken) {
       return new Response(
-        JSON.stringify({ error: 'No Spotify access token found' }),
+        JSON.stringify({ error: 'No Spotify access token found in user metadata or request' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
