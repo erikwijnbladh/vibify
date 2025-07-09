@@ -66,9 +66,11 @@ const Dashboard = () => {
       <header className="max-w-4xl mx-auto mb-8 pt-4 relative z-10">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
-              <Music className="w-6 h-6 text-white" />
-            </div>
+            <img 
+              src="/@vibify.png" 
+              alt="Vibify" 
+              className="w-10 h-10 rounded-lg"
+            />
             <h1 className="text-2xl font-bold text-white">Vibify Dashboard</h1>
           </div>
           <Button 
@@ -84,8 +86,12 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-8">
-          <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
-            <User className="w-12 h-12 text-white" />
+          <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20 p-2">
+            <img 
+              src="/@vibify.png" 
+              alt="Vibify" 
+              className="w-full h-full rounded-full"
+            />
           </div>
           <h2 className="text-3xl font-bold text-white mb-2">
             Welcome to Vibify!

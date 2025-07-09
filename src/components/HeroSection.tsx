@@ -11,9 +11,16 @@ export const HeroSection = () => {
 
   return <div className="h-screen w-screen flex flex-col justify-center items-center relative">
       <LavaLamp />
-      <h1 className="text-6xl md:text-8xl font-bold tracking-tight mix-blend-exclusion text-white whitespace-nowrap">
-        Vibify
-      </h1>
+      <div className="flex flex-col items-center gap-6">
+        <img 
+          src="/@vibify.png" 
+          alt="Vibify" 
+          className="w-32 h-32 md:w-40 md:h-40 mix-blend-exclusion"
+        />
+        <h1 className="text-6xl md:text-8xl font-bold tracking-tight mix-blend-exclusion text-white whitespace-nowrap">
+          Vibify
+        </h1>
+      </div>
       <p className="text-lg md:text-xl text-center text-white mix-blend-exclusion max-w-2xl leading-relaxed mt-6">
         Transform your mood into the perfect playlist. Just describe what you're feeling and let AI curate your soundtrack.
       </p>

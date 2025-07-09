@@ -82,9 +82,11 @@ const CreatePlaylist = () => {
             Back
           </Button>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
-              <Music className="w-6 h-6 text-white" />
-            </div>
+            <img 
+              src="/@vibify.png" 
+              alt="Vibify" 
+              className="w-10 h-10 rounded-lg"
+            />
             <h1 className="text-2xl font-bold text-white">Create AI Playlist</h1>
           </div>
         </div>
@@ -94,8 +96,12 @@ const CreatePlaylist = () => {
       <div className="max-w-2xl mx-auto relative z-10">
         <Card className="p-8 bg-white/5 border-white/10 backdrop-blur-sm">
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
-              <Sparkles className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20 p-2">
+              <img 
+                src="/@vibify.png" 
+                alt="Vibify" 
+                className="w-full h-full rounded-full"
+              />
             </div>
             <h2 className="text-3xl font-bold text-white mb-2">
               Describe Your Vibe

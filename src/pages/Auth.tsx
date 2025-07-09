@@ -118,8 +118,12 @@ const Auth = () => {
       
       <Card className="w-full max-w-md p-8 text-center bg-white/5 border-white/10 backdrop-blur-sm relative z-10">
         <div className="mb-6">
-          <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
-            <Music className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20 p-2">
+            <img 
+              src="/@vibify.png" 
+              alt="Vibify" 
+              className="w-full h-full rounded-full"
+            />
           </div>
           {user ? (
             <>

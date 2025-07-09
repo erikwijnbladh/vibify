@@ -4,7 +4,7 @@
 
 Vibify is an innovative web application that uses artificial intelligence to generate personalized Spotify playlists based on natural language descriptions of your mood, activity, or desired vibe.
 
-![Vibify Hero](public/placeholder.svg)
+![Vibify Logo](public/@vibify.png)
 
 ## ✨ Features
 
