@@ -89,7 +89,7 @@ const CreatePlaylist = () => {
               Describe Your Vibe
             </h2>
             <p className="text-muted-foreground">
-              Tell us what kind of music you're in the mood for, and our AI will create the perfect public playlist for you to follow
+              Tell us what kind of music you're in the mood for, and our AI will create a public playlist that you can instantly follow on Spotify
             </p>
           </div>
 

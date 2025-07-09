@@ -137,7 +137,7 @@ const Authenticated = () => {
             <span>• Natural language prompts</span>
             <span>• AI-powered analysis</span>
             <span>• Smart music curation</span>
-            <span>• Direct Spotify integration</span>
+            <span>• Instant playlist following</span>
           </div>
         </Card>
       </div>
