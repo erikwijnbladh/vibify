@@ -51,12 +51,12 @@ serve(async (req) => {
     }
 
     // Use Vibify's dedicated Spotify account tokens (not user's tokens)
-    let spotifyAccessToken = Deno.env.get('VIBIFY_SPOTIFY_ACCESS_TOKEN')
-    const spotifyRefreshToken = Deno.env.get('VIBIFY_SPOTIFY_REFRESH_TOKEN')
+    let spotifyAccessToken = Deno.env.get('SPOTIFY_ACCESS_TOKEN')
+    const spotifyRefreshToken = Deno.env.get('SPOTIFY_REFRESH_TOKEN')
 
     if (!spotifyAccessToken || !spotifyRefreshToken) {
       return new Response(
-        JSON.stringify({ error: 'Vibify Spotify credentials not configured' }),
+        JSON.stringify({ error: 'Spotify credentials not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -73,7 +73,7 @@ serve(async (req) => {
         spotifyAccessToken = refreshResponse.access_token
       } else {
         return new Response(
-          JSON.stringify({ error: 'Failed to refresh Vibify Spotify token' }),
+          JSON.stringify({ error: 'Failed to refresh Spotify token' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
       }
