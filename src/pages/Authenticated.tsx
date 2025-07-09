@@ -79,9 +79,6 @@ const Authenticated = () => {
           <h2 className="text-3xl font-bold text-foreground mb-2">
             Welcome to Vibify!
           </h2>
-          <p className="text-lg text-muted-foreground mb-4">
-            You're successfully connected to Spotify
-          </p>
           {user?.email && (
             <p className="text-sm text-muted-foreground">
               Signed in as: {user.email}
