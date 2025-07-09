@@ -119,7 +119,7 @@ async function analyzePromptWithAI(prompt: string) {
           content: `You are a music expert AI that analyzes user prompts to create perfect Spotify playlists. 
           
           Analyze the user's prompt and return a JSON object with:
-          - playlistName: A catchy, descriptive name for the playlist
+          - playlistName: A creative, unique name for the playlist (vary style each time - sometimes poetic, sometimes fun, sometimes descriptive. Add time/date elements or creative twists to ensure uniqueness)
           - description: A detailed description of the playlist mood/vibe
           - mood: Array of mood descriptors (e.g., ["chill", "relaxed", "contemplative"])
           - genres: Array of specific music genres (e.g., ["indie rock", "indie folk", "alternative"])
@@ -128,7 +128,9 @@ async function analyzePromptWithAI(prompt: string) {
           - themes: Array of thematic elements (e.g., ["rainy day", "morning", "introspective"])
           - searchQueries: Array of 8-12 specific search queries to find relevant tracks on Spotify
           
-          Make the searchQueries diverse but cohesive - mix popular and lesser-known artists, different eras, and subgenres that fit the mood.`
+          Make the searchQueries diverse but cohesive - mix popular and lesser-known artists, different eras, and subgenres that fit the mood.
+          
+          IMPORTANT: Make playlist names unique and creative each time, even for similar prompts. Use different naming styles: poetic ("Velvet Midnight Dreams"), fun ("Rainy Day Rescue Squad"), time-based ("Sunday 3PM Vibes"), or descriptive with twists.`
         },
         {
           role: 'user',
