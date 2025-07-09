@@ -128,17 +128,25 @@ const Authenticated = () => {
           </Card>
         </div>
 
-        {/* Coming Soon Section */}
+        {/* Create Playlist Section */}
         <Card className="p-8 text-center bg-gradient-to-r from-primary/5 to-secondary/5">
-          <h3 className="text-2xl font-bold mb-4">🚀 Coming Soon</h3>
+          <h3 className="text-2xl font-bold mb-4">🎵 Ready to Create?</h3>
           <p className="text-lg text-muted-foreground mb-6">
-            Playlist creation functionality is being developed. Stay tuned for the full experience!
+            Describe your mood and let our AI create the perfect playlist for you!
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+          <Button 
+            size="lg" 
+            className="bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold px-8 py-3"
+            onClick={() => navigate('/create-playlist')}
+          >
+            <Sparkles className="w-5 h-5 mr-2" />
+            Create AI Playlist
+          </Button>
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground mt-6">
             <span>• Natural language prompts</span>
-            <span>• Instant playlist generation</span>
-            <span>• Mood-based recommendations</span>
-            <span>• Spotify integration</span>
+            <span>• AI-powered analysis</span>
+            <span>• Smart music curation</span>
+            <span>• Direct Spotify integration</span>
           </div>
         </Card>
       </div>
