@@ -21,11 +21,11 @@ Vibify is an innovative web application that uses artificial intelligence to gen
 - Fully responsive mobile-first design
 - Smooth hover animations and micro-interactions
 
-### 🎧 **Seamless Spotify Integration**
-- Direct playlist creation in Spotify
-- Public playlists created by @VibifyMusic account
-- No need for users to connect their Spotify accounts
-- Instant playlist sharing and following
+### 🎧 **Smart Spotify Integration**
+- Direct playlist creation in your Spotify library
+- Private, collaborative playlists you own and control
+- Add, remove, and rearrange tracks as you like
+- AI provides the perfect starting point, you make it yours
 
 ### 🔐 **User Authentication**
 - Secure email/password authentication via Supabase
@@ -35,18 +35,20 @@ Vibify is an innovative web application that uses artificial intelligence to gen
 
 ## 🏗️ Architecture
 
-Vibify uses a **hybrid approach** for Spotify integration:
+Vibify uses a **collaborative playlist approach** for Spotify integration:
 
 - **User Authentication**: Handled via Supabase Auth for tracking and rate limiting
-- **Playlist Creation**: Uses a dedicated Vibify Spotify account to create public playlists
-- **No User Spotify Auth Required**: Users can immediately start creating playlists without OAuth flows
+- **Playlist Creation**: Uses a dedicated Vibify Spotify account to create private, collaborative playlists
+- **User Ownership**: Playlists are transferred to user's library and made collaborative
+- **Privacy First**: All playlists are private and only visible to the user
 
 ### Why This Approach?
 
-1. **Simplified UX**: No complex Spotify OAuth for users
-2. **Developer Friendly**: Bypasses Spotify's organization requirements for individual developers
-3. **Public Discovery**: All playlists are public and discoverable
-4. **Scalable**: Centralized playlist management and branding
+1. **User Privacy**: Playlists are private and personal to each user
+2. **Full Control**: Users can add, remove, and rearrange tracks freely
+3. **AI Starting Point**: Perfect foundation that users can build upon
+4. **True Collaboration**: Users can invite friends to collaborate on playlists
+5. **Developer Friendly**: Bypasses Spotify's organization requirements for individual developers
 
 ## 🛠️ Tech Stack
 
@@ -147,6 +149,12 @@ Vibify uses a **hybrid approach** for Spotify integration:
 
 "Romantic jazz and neo-soul for a candlelit dinner date at home"
 ```
+
+### What You Get
+- **AI-curated starting tracks** based on your prompt
+- **Private playlist** in your Spotify library
+- **Collaborative mode** enabled so you can add your own favorites
+- **Full control** to modify, rearrange, or completely customize
 
 ## 📁 Project Structure
 

@@ -22,7 +22,7 @@ export const HeroSection = () => {
         </h1>
       </div>
       <p className="text-lg md:text-xl text-center text-white mix-blend-exclusion max-w-2xl leading-relaxed mt-6">
-        Transform your mood into the perfect playlist. Just describe what you're feeling and let AI curate your soundtrack.
+        Transform your mood into the perfect playlist. Get AI-curated tracks in a private, collaborative playlist you can make your own.
       </p>
       
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">

@@ -143,7 +143,7 @@ const Auth = () => {
                 Welcome to Vibify
               </h1>
               <p className="text-white/70">
-                Sign in to start creating personalized playlists with AI
+                Sign in to create private, collaborative playlists with AI curation
               </p>
             </>
           )}
@@ -152,15 +152,15 @@ const Auth = () => {
         <div className="space-y-4 mb-6">
           <div className="flex items-center gap-3 text-sm text-white/70">
             <Sparkles className="w-4 h-4 text-white" />
-            <span>Create unlimited playlists</span>
+            <span>Private, collaborative playlists</span>
           </div>
           <div className="flex items-center gap-3 text-sm text-white/70">
             <Sparkles className="w-4 h-4 text-white" />
-            <span>AI-powered mood matching</span>
+            <span>AI-curated starting tracks</span>
           </div>
           <div className="flex items-center gap-3 text-sm text-white/70">
             <Sparkles className="w-4 h-4 text-white" />
-            <span>Seamless Spotify integration</span>
+            <span>Add your own favorite songs</span>
           </div>
         </div>
 

@@ -229,7 +229,7 @@ async function createSpotifyPlaylist(
 
   const user = await userResponse.json()
 
-  // Create playlist
+  // Create playlist (private and collaborative)
   const playlistResponse = await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, {
     method: 'POST',
     headers: {
@@ -238,8 +238,9 @@ async function createSpotifyPlaylist(
     },
     body: JSON.stringify({
       name,
-      description,
-      public: true
+      description: `${description}\n\n🤖 AI-curated by Vibify • Add your own tracks to make it yours!`,
+      public: false,
+      collaborative: true
     })
   })
 

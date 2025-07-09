@@ -107,8 +107,31 @@ const CreatePlaylist = () => {
               Describe Your Vibe
             </h2>
             <p className="text-white/70">
-              Tell us what kind of music you're in the mood for, and our AI will create the perfect public playlist for you to follow
+              Tell us what kind of music you're in the mood for, and our AI will create a private collaborative playlist just for you
             </p>
+          </div>
+
+          {/* How it works */}
+          <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
+            <h3 className="text-lg font-semibold text-white mb-3">🎯 How Your Playlist Works</h3>
+            <div className="space-y-2 text-sm text-white/70">
+              <div className="flex items-start gap-2">
+                <span className="text-blue-400">🤖</span>
+                <span>AI analyzes your prompt and curates the perfect starting tracks</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-green-400">🔒</span>
+                <span>Playlist is private - only visible to you in your Spotify library</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-purple-400">✨</span>
+                <span>Collaborative mode lets you add, remove, and rearrange tracks freely</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-orange-400">🎵</span>
+                <span>Make it truly yours by adding personal favorites that match the vibe</span>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-6">
@@ -150,20 +173,27 @@ const CreatePlaylist = () => {
                       <Music className="w-8 h-8 text-green-400" />
                     </div>
                     <h3 className="text-xl font-bold text-green-300 mb-2">
-                      Playlist Created! 🎉
+                      Your Playlist is Ready! 🎉
                     </h3>
                     <p className="text-green-200 mb-4">
-                      "{result.playlist.name}" with {result.playlist.trackCount} tracks
+                      "{result.playlist.name}" with {result.playlist.trackCount} AI-curated tracks
                     </p>
                     <p className="text-sm text-green-300/80 mb-4">
-                      Created by @VibifyMusic • {result.playlist.description}
+                      Private & collaborative • You can add your own favorite tracks!
                     </p>
-                    <Button 
-                      className="bg-green-500 hover:bg-green-400 text-black font-semibold transition-all duration-300 hover:scale-105"
-                      onClick={() => window.open(`https://open.spotify.com/playlist/${result.playlist.id}`, '_blank')}
-                    >
-                      Open in Spotify
-                    </Button>
+                    <div className="space-y-3">
+                      <Button 
+                        className="bg-green-500 hover:bg-green-400 text-black font-semibold transition-all duration-300 hover:scale-105"
+                        onClick={() => window.open(`https://open.spotify.com/playlist/${result.playlist.id}`, '_blank')}
+                      >
+                        Open Your Playlist
+                      </Button>
+                      <div className="text-xs text-green-300/70 space-y-1">
+                        <p>✨ Add your own tracks to personalize it further</p>
+                        <p>🔒 Private playlist - only you can see it</p>
+                        <p>🎵 AI-curated starting tracks based on your vibe</p>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <div className="text-center">

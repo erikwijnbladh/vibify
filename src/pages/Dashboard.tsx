@@ -109,9 +109,9 @@ const Dashboard = () => {
             <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
               <Sparkles className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">AI Playlists</h3>
+            <h3 className="text-xl font-semibold mb-2 text-white">Private AI Playlists</h3>
             <p className="text-white/70">
-              Create personalized playlists based on your mood and preferences
+              Create private, collaborative playlists you can personalize with your own tracks
             </p>
           </Card>
 
@@ -143,7 +143,7 @@ const Dashboard = () => {
           <div className="relative z-10">
             <h3 className="text-2xl font-bold mb-4 text-white">🎵 Ready to Create?</h3>
             <p className="text-lg text-white/70 mb-6">
-              Describe your mood and let our AI create the perfect playlist for you!
+              Describe your mood and get a private, collaborative playlist you can make your own!
             </p>
             <Button 
               size="lg" 
@@ -155,9 +155,9 @@ const Dashboard = () => {
             </Button>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 mt-6">
               <span>• Natural language prompts</span>
-              <span>• AI-powered analysis</span>
-              <span>• Smart music curation</span>
-              <span>• Direct Spotify integration</span>
+              <span>• Private & collaborative</span>
+              <span>• Add your own tracks</span>
+              <span>• AI-curated starting point</span>
             </div>
           </div>
         </Card>
