@@ -19,23 +19,18 @@ const CreatePlaylist = () => {
     setResult(null);
 
     try {
-      // Get current user session to access Spotify tokens
+      // Verify user is authenticated (for tracking/rate limiting)
       const { data: { session } } = await supabase.auth.getSession();
       
-      // Check for tokens in different possible locations
-      const spotifyToken = session?.provider_token || 
-                          session?.user?.user_metadata?.provider_token ||
-                          session?.user?.app_metadata?.provider_token;
-      
-      if (!spotifyToken) {
-        throw new Error('No Spotify access token found. Please re-authenticate with Spotify.');
+      if (!session?.user) {
+        throw new Error('Please sign in to create playlists.');
       }
 
       // Call the Supabase Edge Function for AI-powered playlist creation
+      // (Uses Vibify Spotify account on backend, not user's account)
       const { data, error } = await supabase.functions.invoke('prompt_to_playlist', {
         body: { 
-          prompt: prompt.trim(),
-          spotify_token: spotifyToken
+          prompt: prompt.trim()
         }
       });
 
@@ -94,7 +89,7 @@ const CreatePlaylist = () => {
               Describe Your Vibe
             </h2>
             <p className="text-muted-foreground">
-              Tell us what kind of music you're in the mood for, and our AI will create the perfect playlist
+              Tell us what kind of music you're in the mood for, and our AI will create the perfect public playlist for you to follow
             </p>
           </div>
 
@@ -143,7 +138,7 @@ const CreatePlaylist = () => {
                       "{result.playlist.name}" with {result.playlist.trackCount} tracks
                     </p>
                     <p className="text-sm text-green-600 mb-4">
-                      {result.playlist.description}
+                      Created by @VibifyMusic • {result.playlist.description}
                     </p>
                     <Button 
                       className="bg-green-600 hover:bg-green-700 text-white"

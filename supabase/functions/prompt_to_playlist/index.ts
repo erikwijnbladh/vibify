@@ -8,7 +8,6 @@ const corsHeaders = {
 
 interface PlaylistRequest {
   prompt: string;
-  spotify_token?: string;
 }
 
 interface SpotifyTrack {
@@ -42,7 +41,7 @@ serve(async (req) => {
       )
     }
 
-    const { prompt, spotify_token }: PlaylistRequest = await req.json()
+    const { prompt }: PlaylistRequest = await req.json()
 
     if (!prompt) {
       return new Response(
@@ -51,14 +50,14 @@ serve(async (req) => {
       )
     }
 
-    // Get Spotify tokens from user metadata or request body
-    const spotifyAccessToken = user.user_metadata?.provider_token || spotify_token
-    const spotifyRefreshToken = user.user_metadata?.provider_refresh_token
+    // Use Vibify's dedicated Spotify account tokens (not user's tokens)
+    const spotifyAccessToken = Deno.env.get('VIBIFY_SPOTIFY_ACCESS_TOKEN')
+    const spotifyRefreshToken = Deno.env.get('VIBIFY_SPOTIFY_REFRESH_TOKEN')
 
     if (!spotifyAccessToken) {
       return new Response(
-        JSON.stringify({ error: 'No Spotify access token found in user metadata or request' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'Vibify Spotify credentials not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
@@ -82,6 +81,7 @@ serve(async (req) => {
         playlist: {
           id: playlist.id,
           name: playlist.name,
+          description: playlist.description,
           url: playlist.external_urls.spotify,
           trackCount: tracks.length
         }
@@ -220,7 +220,7 @@ async function createSpotifyPlaylist(
     body: JSON.stringify({
       name,
       description,
-      public: false
+      public: true
     })
   })
 
