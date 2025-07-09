@@ -16,7 +16,7 @@ const Auth = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUser(user);
-        navigate('/authenticated');
+        // Don't auto-redirect - let user choose to continue or switch accounts
       }
     };
 
@@ -27,6 +27,8 @@ const Auth = () => {
       (event, session) => {
         if (event === 'SIGNED_IN' && session) {
           navigate('/authenticated');
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
         }
       }
     );
@@ -56,6 +58,21 @@ const Auth = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    setLoading(true);
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      alert(`Sign out failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleContinue = () => {
+    navigate('/authenticated');
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
       <Card className="w-full max-w-md p-8 text-center">
@@ -63,12 +80,28 @@ const Auth = () => {
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Music className="w-10 h-10 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            Connect to Spotify
-          </h1>
-          <p className="text-muted-foreground">
-            Sign in with your Spotify account to start creating personalized playlists
-          </p>
+          {user ? (
+            <>
+              <h1 className="text-3xl font-bold text-foreground mb-2">
+                Already Signed In
+              </h1>
+              <p className="text-muted-foreground mb-4">
+                You're currently signed in as <strong>{user.email}</strong>
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Continue to your dashboard or sign out to use a different account
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold text-foreground mb-2">
+                Connect to Spotify
+              </h1>
+              <p className="text-muted-foreground">
+                Sign in with your Spotify account to start creating personalized playlists
+              </p>
+            </>
+          )}
         </div>
 
         <div className="space-y-4 mb-6">
@@ -86,14 +119,36 @@ const Auth = () => {
           </div>
         </div>
 
-        <Button 
-          onClick={handleSpotifyAuth}
-          disabled={loading}
-          className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
-          size="lg"
-        >
-          {loading ? "Connecting..." : "Continue with Spotify"}
-        </Button>
+        {user ? (
+          <div className="space-y-3">
+            <Button 
+              onClick={handleContinue}
+              disabled={loading}
+              className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
+              size="lg"
+            >
+              Continue to Dashboard
+            </Button>
+            <Button 
+              onClick={handleSignOut}
+              disabled={loading}
+              variant="outline"
+              className="w-full"
+              size="lg"
+            >
+              {loading ? "Signing out..." : "Sign Out & Use Different Account"}
+            </Button>
+          </div>
+        ) : (
+          <Button 
+            onClick={handleSpotifyAuth}
+            disabled={loading}
+            className="w-full bg-[#1DB954] hover:bg-[#1ed760] text-white font-semibold py-3"
+            size="lg"
+          >
+            {loading ? "Connecting..." : "Continue with Spotify"}
+          </Button>
+        )}
 
         <p className="text-xs text-muted-foreground mt-4">
           By continuing, you agree to our terms of service and privacy policy
