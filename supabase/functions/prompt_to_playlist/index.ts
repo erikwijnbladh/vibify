@@ -54,6 +54,7 @@ serve(async (req) => {
     let spotifyAccessToken = Deno.env.get('SPOTIFY_ACCESS_TOKEN')
     const spotifyRefreshToken = Deno.env.get('SPOTIFY_REFRESH_TOKEN')
 
+
     if (!spotifyAccessToken || !spotifyRefreshToken) {
       return new Response(
         JSON.stringify({ error: 'Spotify credentials not configured' }),
@@ -65,6 +66,7 @@ serve(async (req) => {
     const tokenTestResponse = await fetch('https://api.spotify.com/v1/me', {
       headers: { 'Authorization': `Bearer ${spotifyAccessToken}` }
     })
+
 
     if (!tokenTestResponse.ok) {
       // Token expired, refresh it
@@ -94,7 +96,7 @@ serve(async (req) => {
     )
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: true,
         playlist: {
           id: playlist.id,
@@ -108,9 +110,8 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Error creating playlist:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: 'Failed to create playlist' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
@@ -118,7 +119,7 @@ serve(async (req) => {
 
 async function analyzePromptWithAI(prompt: string) {
   const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-  
+
   if (!openaiApiKey) {
     throw new Error('OpenAI API key not configured')
   }
@@ -202,7 +203,7 @@ async function searchSpotifyTracks(analysis: any, accessToken: string): Promise<
         })
       }
     } catch (error) {
-      console.error(`Error searching for "${query}":`, error)
+      // Skip failed search queries
     }
   }
 
@@ -212,9 +213,9 @@ async function searchSpotifyTracks(analysis: any, accessToken: string): Promise<
 }
 
 async function createSpotifyPlaylist(
-  name: string, 
-  description: string, 
-  tracks: SpotifyTrack[], 
+  name: string,
+  description: string,
+  tracks: SpotifyTrack[],
   accessToken: string
 ) {
   // Get user profile
@@ -251,7 +252,7 @@ async function createSpotifyPlaylist(
   // Add tracks to playlist
   if (tracks.length > 0) {
     const trackUris = tracks.map(track => track.uri)
-    
+
     await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
       method: 'POST',
       headers: {
@@ -271,10 +272,7 @@ async function refreshSpotifyToken(refreshToken: string) {
   const clientId = Deno.env.get('SPOTIFY_CLIENT_ID')
   const clientSecret = Deno.env.get('SPOTIFY_CLIENT_SECRET')
   
-  console.log('Refresh token attempt - clientId exists:', !!clientId, 'clientSecret exists:', !!clientSecret)
-  
   if (!clientId || !clientSecret) {
-    console.error('Missing Spotify credentials - clientId:', !!clientId, 'clientSecret:', !!clientSecret)
     return { success: false, error: 'Spotify credentials not configured' }
   }
 
@@ -291,23 +289,17 @@ async function refreshSpotifyToken(refreshToken: string) {
       })
     })
 
-    console.log('Spotify refresh response status:', response.status)
-
     if (response.ok) {
       const data = await response.json()
-      console.log('Token refresh successful')
       return { 
         success: true, 
         access_token: data.access_token,
         refresh_token: data.refresh_token || refreshToken // Use new refresh token if provided
       }
     } else {
-      const errorData = await response.text()
-      console.error('Spotify refresh failed with status:', response.status, 'error:', errorData)
-      return { success: false, error: `Failed to refresh token: ${response.status} - ${errorData}` }
+      return { success: false, error: 'Failed to refresh token' }
     }
   } catch (error) {
-    console.error('Token refresh exception:', error)
     return { success: false, error: error.message }
   }
 } 
