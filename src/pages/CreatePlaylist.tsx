@@ -180,34 +180,7 @@ const CreatePlaylist = () => {
               />
             </div>
 
-            {/* Loading Progress */}
-            {loading && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-center gap-3 animate-in">
-                  {(() => {
-                    const CurrentIcon = loadingMessages[loadingMessageIndex].icon;
-                    return <CurrentIcon className="w-5 h-5 text-primary animate-pulse" />;
-                  })()}
-                  <span className="text-sm font-medium text-foreground">
-                    {loadingMessages[loadingMessageIndex].text}
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Progress</span>
-                    <span className="font-medium text-primary">{progress}%</span>
-                  </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-warm transition-all duration-500 ease-out"
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <Button 
+            <Button
               onClick={handleCreatePlaylist}
               disabled={!prompt.trim() || loading}
               className="w-full h-12 text-base shadow-soft hover:shadow-hover"
@@ -215,8 +188,11 @@ const CreatePlaylist = () => {
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Creating Playlist...
+                  {(() => {
+                    const CurrentIcon = loadingMessages[loadingMessageIndex].icon;
+                    return <CurrentIcon className="w-5 h-5 mr-2 animate-pulse" />;
+                  })()}
+                  {loadingMessages[loadingMessageIndex].text}
                 </>
               ) : (
                 <>
