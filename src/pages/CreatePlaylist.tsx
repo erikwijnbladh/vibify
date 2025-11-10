@@ -165,6 +165,11 @@ const CreatePlaylist = () => {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Tell us what you're in the mood for, and our AI will curate the perfect playlist
           </p>
+          <div className="pt-2">
+            <p className="text-sm text-muted-foreground/80 max-w-xl mx-auto">
+              💡 Playlists are created on the Vibify Spotify account. You'll get a shareable link to listen and can save it to your library if you like!
+            </p>
+          </div>
         </div>
 
         <Card className="p-8 shadow-hover border-border/50 mb-8">
@@ -224,6 +229,9 @@ const CreatePlaylist = () => {
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {result.playlist.trackCount} tracks • Created by @VibifyMusic
+                      </p>
+                      <p className="text-xs text-muted-foreground/70 mt-2 max-w-md mx-auto">
+                        This playlist lives on the Vibify Spotify account. Click below to open it, then you can follow it to add it to your library!
                       </p>
                       {result.playlist.description && (
                         <p className="text-sm text-muted-foreground mt-2">

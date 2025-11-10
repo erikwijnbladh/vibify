@@ -232,7 +232,7 @@ export const HeroSection = () => {
             </div>
             <h3 className="font-semibold">Spotify Ready</h3>
             <p className="text-sm text-muted-foreground text-center">
-              Instant export to your Spotify account
+              Get instant shareable Spotify links
             </p>
           </div>
 

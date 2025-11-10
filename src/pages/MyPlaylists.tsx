@@ -124,12 +124,15 @@ const MyPlaylists = () => {
           </Card>
         ) : (
           <div className="space-y-8">
-            <div className="text-center mb-8 animate-in">
+            <div className="text-center mb-8 animate-in space-y-3">
               <h2 className="text-4xl font-bold mb-2">
                 Your Collection
               </h2>
               <p className="text-muted-foreground">
                 {playlists.length} playlist{playlists.length !== 1 ? 's' : ''} created
+              </p>
+              <p className="text-sm text-muted-foreground/80 max-w-xl mx-auto">
+                💡 These playlists are hosted on the Vibify Spotify account. Click any playlist to open in Spotify, where you can follow it to add to your library!
               </p>
             </div>
 
