@@ -188,11 +188,14 @@ const CreatePlaylist = () => {
             >
               {loading ? (
                 <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                   {(() => {
                     const CurrentIcon = loadingMessages[loadingMessageIndex].icon;
-                    return <CurrentIcon className="w-5 h-5 mr-2 animate-pulse" />;
+                    return <CurrentIcon className="w-4 h-4 mr-2 animate-pulse" />;
                   })()}
-                  {loadingMessages[loadingMessageIndex].text}
+                  <span className="font-semibold">
+                    {loadingMessages[loadingMessageIndex].text}
+                  </span>
                 </>
               ) : (
                 <>
