@@ -1,1 +1,4 @@
 project_id = "lsbfvwsrptcwlabcrvxb"
+
+[functions.prompt_to_playlist]
+verify_jwt = true
