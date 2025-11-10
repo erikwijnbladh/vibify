@@ -27,7 +27,7 @@ const MyPlaylists = () => {
     const checkUserAndLoadPlaylists = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        navigate('/auth');
+        navigate('/');
         return;
       }
       
