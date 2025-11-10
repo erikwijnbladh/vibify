@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Music, User, LogOut, Home, Sparkles, Crown, History } from "lucide-react";
+import { Music2, Sparkles, LogOut, Crown, History, Loader2 } from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -50,23 +50,11 @@ const Dashboard = () => {
     navigate('/');
   };
 
-  const goToCreatePlaylist = () => {
-    navigate('/create-playlist');
-  };
-
-  const goToMyPlaylists = () => {
-    navigate('/my-playlists');
-  };
-
-  const goToAdmin = () => {
-    navigate('/admin');
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <div className="text-center space-y-4">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
           <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
@@ -74,152 +62,107 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 relative">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black opacity-80"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.03)_0%,transparent_60%)]"></div>
-      
+    <div className="min-h-screen bg-gradient-subtle">
       {/* Header */}
-      <header className="max-w-4xl mx-auto mb-8 pt-4 relative z-10">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <img 
-              src="/@vibify.png" 
-              alt="Vibify" 
-              className="w-10 h-10 rounded-lg"
-            />
-            <h1 className="text-2xl font-bold text-white">Vibify Dashboard</h1>
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-warm rounded-xl flex items-center justify-center">
+                <Music2 className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold">Vibify</h1>
+                <p className="text-xs text-muted-foreground">Dashboard</p>
+              </div>
+            </div>
+            <Button 
+              variant="ghost" 
+              onClick={handleLogout}
+              className="gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
           </div>
-          <Button 
-            variant="outline" 
-            onClick={handleLogout}
-            className="border-white/20 text-black hover:bg-white/10 hover:border-white/30"
-          >
-            Logout
-          </Button>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto relative z-10">
-        <div className="text-center mb-8">
-          <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20 p-2">
-            <img 
-              src="/@vibify.png" 
-              alt="Vibify" 
-              className="w-full h-full rounded-full"
-            />
-          </div>
-          <h2 className="text-3xl font-bold text-white mb-2">
-            Welcome to Vibify!
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-12 space-y-3 animate-in">
+          <h2 className="text-4xl md:text-5xl font-bold">
+            Welcome Back
           </h2>
           {user?.email && (
-            <p className="text-sm text-white/60">
-              Signed in as: {user.email}
+            <p className="text-muted-foreground">
+              {user.email}
             </p>
           )}
         </div>
 
-        {/* Feature Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <Card className="p-6 text-center hover:scale-105 transition-all duration-300 bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10">
-            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
-              <Sparkles className="w-8 h-8 text-white" />
+        {/* Quick Actions */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+          <Card className="p-8 text-center hover:shadow-hover transition-all duration-300 group border-border/50">
+            <div className="w-16 h-16 bg-gradient-warm rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-soft">
+              <Sparkles className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">AI Playlists</h3>
-            <p className="text-white/70">
-              Create personalized playlists based on your mood and preferences
+            <h3 className="text-2xl font-bold mb-2">Create Playlist</h3>
+            <p className="text-muted-foreground mb-6">
+              Describe your mood and let AI craft the perfect playlist
             </p>
+            <Button 
+              size="lg" 
+              className="shadow-soft hover:shadow-hover"
+              onClick={() => navigate('/create-playlist')}
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Create Now
+            </Button>
           </Card>
 
-          <Card className="p-6 text-center hover:scale-105 transition-all duration-300 bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10">
-            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
-              <Music className="w-8 h-8 text-white" />
+          <Card className="p-8 text-center hover:shadow-hover transition-all duration-300 group border-border/50">
+            <div className="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+              <History className="w-8 h-8 text-accent" />
             </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Smart Curation</h3>
-            <p className="text-white/70">
-              Our AI understands context and creates perfect soundtracks
+            <h3 className="text-2xl font-bold mb-2">My Playlists</h3>
+            <p className="text-muted-foreground mb-6">
+              Browse and revisit your AI-generated collections
             </p>
-          </Card>
-
-          <Card className="p-6 text-center hover:scale-105 transition-all duration-300 bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 md:col-span-2 lg:col-span-1">
-            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
-              <User className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Personal Touch</h3>
-            <p className="text-white/70">
-              Tailored to your unique music taste and listening history
-            </p>
-          </Card>
-        </div>
-
-        {/* Action Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Create Playlist Card */}
-          <Card className="p-8 text-center bg-white/5 border-white/10 backdrop-blur-sm relative overflow-hidden hover:bg-white/10 transition-all duration-300">
-            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-50"></div>
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-4 text-white">🎵 Ready to Create?</h3>
-              <p className="text-lg text-white/70 mb-6">
-                Describe your mood and let our AI create the perfect playlist for you!
-              </p>
-              <Button 
-                size="lg" 
-                className="bg-white text-black hover:bg-white/90 font-semibold px-8 py-3 transition-all duration-300 hover:scale-105"
-                onClick={goToCreatePlaylist}
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Create AI Playlist
-              </Button>
-            </div>
-          </Card>
-
-          {/* My Playlists Card */}
-          <Card className="p-8 text-center bg-white/5 border-white/10 backdrop-blur-sm relative overflow-hidden hover:bg-white/10 transition-all duration-300">
-            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-50"></div>
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-4 text-white">📚 Your Collection</h3>
-              <p className="text-lg text-white/70 mb-6">
-                Browse and revisit all your AI-generated playlists
-              </p>
-              <Button 
-                size="lg" 
-                className="bg-white/10 text-white border border-white/20 hover:bg-white/20 font-semibold px-8 py-3 transition-all duration-300 hover:scale-105"
-                onClick={goToMyPlaylists}
-              >
-                <History className="w-5 h-5 mr-2" />
-                View My Playlists
-              </Button>
-            </div>
+            <Button 
+              size="lg" 
+              variant="outline"
+              onClick={() => navigate('/my-playlists')}
+            >
+              <History className="w-4 h-4 mr-2" />
+              View Playlists
+            </Button>
           </Card>
         </div>
 
         {/* Admin Access */}
         {isAdmin && (
-          <Card className="p-6 text-center bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-amber-500/20 backdrop-blur-sm relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-transparent to-orange-500/5 opacity-50"></div>
-            <div className="relative z-10">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Crown className="w-6 h-6 text-amber-400" />
-                <h3 className="text-xl font-bold text-amber-300">Admin Access</h3>
-              </div>
-              <p className="text-amber-200/80 mb-4">
-                View analytics, user data, and system statistics
-              </p>
-              <Button 
-                onClick={goToAdmin}
-                className="bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 font-semibold transition-all duration-300 hover:scale-105"
-              >
-                <Crown className="w-4 h-4 mr-2" />
-                Admin Dashboard
-              </Button>
+          <Card className="p-6 text-center border-primary/30 bg-primary/5 animate-in">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Crown className="w-5 h-5 text-primary" />
+              <h3 className="text-xl font-bold">Admin Access</h3>
             </div>
+            <p className="text-muted-foreground mb-4">
+              View analytics, user data, and system statistics
+            </p>
+            <Button 
+              onClick={() => navigate('/admin')}
+              variant="outline"
+              className="border-primary/30"
+            >
+              <Crown className="w-4 h-4 mr-2" />
+              Admin Dashboard
+            </Button>
           </Card>
         )}
 
         {/* Features Info */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60 mt-6">
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground mt-12">
           <span>• Natural language prompts</span>
           <span>• AI-powered analysis</span>
           <span>• Smart music curation</span>
@@ -230,4 +173,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

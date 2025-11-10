@@ -1,46 +1,75 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { Music, Sparkles, ArrowLeft, Loader2 } from "lucide-react";
+import { Music2, Sparkles, ArrowLeft, Loader2, Check, ExternalLink } from "lucide-react";
+import { toast } from "sonner";
 
 const CreatePlaylist = () => {
   const navigate = useNavigate();
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    // Check auth
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/');
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
+  // Simulate progress during generation
+  useEffect(() => {
+    if (loading) {
+      setProgress(0);
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(interval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [loading]);
 
   const handleCreatePlaylist = async () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim()) {
+      toast.error("Please describe your vibe first");
+      return;
+    }
     
     setLoading(true);
     setResult(null);
+    setProgress(0);
 
     try {
-      // Verify user is authenticated (for tracking/rate limiting)
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session?.user) {
-        throw new Error('Please sign in to create playlists.');
+        throw new Error('Please sign in to create playlists');
       }
 
-      // Call the Supabase Edge Function for AI-powered playlist creation
-      // (Uses Vibify Spotify account on backend, not user's account)
       const { data, error } = await supabase.functions.invoke('prompt_to_playlist', {
-        body: { 
-          prompt: prompt.trim()
-        }
+        body: { prompt: prompt.trim() }
       });
 
-      if (error) {
-        throw new Error(error.message || 'Failed to create playlist');
-      }
+      if (error) throw new Error(error.message || 'Failed to create playlist');
 
       if (data.success) {
-        // Store the playlist in the database
-        const { error: dbError } = await (supabase as any)
+        setProgress(100);
+        
+        // Store in database
+        await (supabase as any)
           .from('playlists')
           .insert({
             user_id: session.user.id,
@@ -52,104 +81,111 @@ const CreatePlaylist = () => {
             spotify_url: `https://open.spotify.com/playlist/${data.playlist.id}`
           });
 
-        if (dbError) {
-          console.error('Error saving playlist to database:', dbError);
-          // Still show success to user, but log the error
-        }
-
         setResult({
           success: true,
           playlist: data.playlist
         });
+        
+        toast.success("Playlist created successfully!");
       } else {
         throw new Error(data.error || 'Unknown error occurred');
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating playlist:', error);
       setResult({
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create playlist'
+        error: error.message || 'Failed to create playlist'
       });
+      toast.error(error.message || 'Failed to create playlist');
     } finally {
       setLoading(false);
     }
   };
 
-  const goBack = () => {
-    navigate('/dashboard');
-  };
+  const examplePrompts = [
+    { emoji: "🏃‍♂️", text: "High-energy EDM for crushing my morning workout" },
+    { emoji: "☕", text: "Cozy indie folk for a rainy Sunday with coffee" },
+    { emoji: "🌙", text: "Melancholic lo-fi for 3am coding sessions" },
+    { emoji: "🚗", text: "Classic rock for an epic road trip" },
+  ];
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 relative">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black opacity-80"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.03)_0%,transparent_60%)]"></div>
-      
+    <div className="min-h-screen bg-gradient-subtle">
       {/* Header */}
-      <header className="max-w-4xl mx-auto mb-8 pt-4 relative z-10">
-        <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={goBack}
-            className="text-white hover:bg-white/10 hover:text-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          <div className="flex items-center gap-3">
-            <img 
-              src="/@vibify.png" 
-              alt="Vibify" 
-              className="w-10 h-10 rounded-lg"
-            />
-            <h1 className="text-2xl font-bold text-white">Create AI Playlist</h1>
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/dashboard')}
+              className="gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Button>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-warm rounded-lg flex items-center justify-center">
+                <Music2 className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="font-semibold">Create Playlist</span>
+            </div>
+            <div className="w-20"></div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto relative z-10">
-        <Card className="p-8 bg-white/5 border-white/10 backdrop-blur-sm">
-          <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20 p-2">
-              <img 
-                src="/@vibify.png" 
-                alt="Vibify" 
-                className="w-full h-full rounded-full"
-              />
-            </div>
-            <h2 className="text-3xl font-bold text-white mb-2">
-              Describe Your Vibe
-            </h2>
-            <p className="text-white/70">
-              Tell us what kind of music you're in the mood for, and our AI will create the perfect public playlist for you to follow
-            </p>
-          </div>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-12 space-y-3 animate-in">
+          <h1 className="text-4xl md:text-5xl font-bold text-gradient">
+            Describe Your Vibe
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Tell us what you're in the mood for, and our AI will curate the perfect playlist
+          </p>
+        </div>
 
+        <Card className="p-8 shadow-hover border-border/50 mb-8">
           <div className="space-y-6">
             <div>
               <Textarea
-                placeholder="e.g., 'chill indie songs for a rainy Sunday morning' or 'upbeat pop for working out' or 'melancholic folk for late night coding'"
+                placeholder="e.g., 'chill indie songs for a rainy Sunday morning' or 'upbeat pop for working out'"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[120px] text-lg bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-white/40 focus:ring-white/20"
+                className="min-h-[140px] text-lg resize-none"
                 disabled={loading}
+                aria-label="Playlist mood description"
               />
             </div>
+
+            {/* Loading Progress */}
+            {loading && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Creating your playlist...</span>
+                  <span className="font-medium">{progress}%</span>
+                </div>
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-warm transition-all duration-500 ease-out"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
 
             <Button 
               onClick={handleCreatePlaylist}
               disabled={!prompt.trim() || loading}
-              className="w-full bg-white text-black hover:bg-white/90 font-semibold py-3 transition-all duration-300 hover:scale-105 disabled:hover:scale-100 disabled:opacity-50"
+              className="w-full h-12 text-base shadow-soft hover:shadow-hover"
               size="lg"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Creating Your Playlist...
+                  Creating Playlist...
                 </>
               ) : (
                 <>
@@ -161,34 +197,42 @@ const CreatePlaylist = () => {
 
             {/* Result Display */}
             {result && (
-              <Card className={`p-6 ${result.success ? 'border-green-500/30 bg-green-500/10' : 'border-red-500/30 bg-red-500/10'} backdrop-blur-sm`}>
+              <Card className={`p-6 animate-in ${result.success ? 'border-primary/30 bg-primary/5' : 'border-destructive/30 bg-destructive/5'}`}>
                 {result.success ? (
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-500/30">
-                      <Music className="w-8 h-8 text-green-400" />
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
+                      <Check className="w-8 h-8 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold text-green-300 mb-2">
-                      Playlist Created! 🎉
-                    </h3>
-                    <p className="text-green-200 mb-4">
-                      "{result.playlist.name}" with {result.playlist.trackCount} tracks
-                    </p>
-                    <p className="text-sm text-green-300/80 mb-4">
-                      Created by @VibifyMusic • {result.playlist.description}
-                    </p>
+                    <div>
+                      <h3 className="text-xl font-bold mb-1">
+                        Playlist Created! 🎉
+                      </h3>
+                      <p className="text-lg font-medium text-primary mb-1">
+                        "{result.playlist.name}"
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {result.playlist.trackCount} tracks • Created by @VibifyMusic
+                      </p>
+                      {result.playlist.description && (
+                        <p className="text-sm text-muted-foreground mt-2">
+                          {result.playlist.description}
+                        </p>
+                      )}
+                    </div>
                     <Button 
-                      className="bg-green-500 hover:bg-green-400 text-black font-semibold transition-all duration-300 hover:scale-105"
+                      className="shadow-soft hover:shadow-hover"
                       onClick={() => window.open(`https://open.spotify.com/playlist/${result.playlist.id}`, '_blank')}
                     >
+                      <ExternalLink className="w-4 h-4 mr-2" />
                       Open in Spotify
                     </Button>
                   </div>
                 ) : (
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-red-300 mb-2">
+                    <h3 className="text-lg font-bold text-destructive mb-2">
                       Failed to Create Playlist
                     </h3>
-                    <p className="text-red-200">
+                    <p className="text-sm text-muted-foreground">
                       {result.error}
                     </p>
                   </div>
@@ -196,46 +240,35 @@ const CreatePlaylist = () => {
               </Card>
             )}
           </div>
+        </Card>
 
-          {/* Examples */}
-          <div className="mt-8 pt-6 border-t border-white/10">
-            <h4 className="text-sm font-semibold text-white/60 mb-4">✨ Get creative with your prompts:</h4>
-            <div className="grid gap-3 text-sm">
-              <div className="flex items-start gap-2">
-                <span className="text-blue-400 font-medium">🏃‍♂️</span>
-                <span className="text-white/70">"High-energy EDM and rock for crushing my morning workout"</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-amber-400 font-medium">🔥</span>
-                <span className="text-white/70">"Cozy indie folk and jazz for a rainy Sunday with coffee and books"</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-purple-400 font-medium">🌙</span>
-                <span className="text-white/70">"Melancholic lo-fi and ambient tracks for 3am coding sessions"</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-green-400 font-medium">🚗</span>
-                <span className="text-white/70">"Classic rock and 90s hits for an epic cross-country road trip"</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-pink-400 font-medium">💕</span>
-                <span className="text-white/70">"Romantic ballads and smooth R&B for a dinner date at home"</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-orange-400 font-medium">🎨</span>
-                <span className="text-white/70">"Experimental electronic and post-rock for creative inspiration"</span>
-              </div>
-            </div>
-            <div className="mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
-              <p className="text-xs text-white/60">
-                💡 <strong className="text-white/80">Tip:</strong> Be specific about mood, activity, genre, or even time of day. Our AI understands context and creates playlists that perfectly match your vibe!
-              </p>
-            </div>
+        {/* Examples */}
+        <Card className="p-6 border-border/50">
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary" />
+            Try these prompts
+          </h4>
+          <div className="grid gap-3">
+            {examplePrompts.map((example, index) => (
+              <button
+                key={index}
+                onClick={() => setPrompt(example.text)}
+                disabled={loading}
+                className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="text-2xl" role="img" aria-label="Emoji">{example.emoji}</span>
+                <span className="text-sm text-muted-foreground flex-1">{example.text}</span>
+              </button>
+            ))}
           </div>
+          <p className="text-xs text-muted-foreground mt-4 flex items-start gap-2">
+            <Sparkles className="w-3 h-3 mt-0.5 flex-shrink-0" />
+            <span>Be specific about mood, activity, genre, or time of day for best results</span>
+          </p>
         </Card>
       </div>
     </div>
   );
 };
 
-export default CreatePlaylist; 
+export default CreatePlaylist;

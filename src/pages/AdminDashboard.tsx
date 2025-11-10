@@ -141,135 +141,138 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-primary">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/80">Loading admin dashboard...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-subtle">
+        <div className="text-center space-y-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-muted-foreground">Loading admin dashboard...</p>
         </div>
       </div>
     );
   }
 
   if (!isAdmin) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-primary text-white p-4">
+    <div className="min-h-screen bg-gradient-subtle">
       {/* Header */}
-      <header className="max-w-6xl mx-auto mb-8 pt-4">
-        <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={goBack}
-            className="text-white hover:bg-white/10 hover:text-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
-          </Button>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center border border-amber-500/30">
-              <Crown className="w-6 h-6 text-amber-400" />
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={goBack}
+              className="gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Button>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30">
+                <Crown className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold">Admin Dashboard</h1>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Shield className="w-3 h-3" />
+                  Admin Access
+                </p>
+              </div>
             </div>
-            <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-            <div className="px-3 py-1 bg-amber-500/20 rounded-full border border-amber-500/30">
-              <span className="text-amber-300 text-sm font-medium flex items-center gap-1">
-                <Shield className="w-3 h-3" />
-                Admin Access
-              </span>
-            </div>
+            <div className="w-20"></div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="p-6 bg-white/10 border-white/20 backdrop-blur-md">
+          <Card className="p-6 hover:shadow-hover transition-all duration-300 border-border/50">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center border border-blue-500/30">
-                <Users className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-white/70 text-sm">Total Users</p>
-                <p className="text-2xl font-bold text-white">{stats.totalUsers}</p>
+                <p className="text-sm text-muted-foreground">Total Users</p>
+                <p className="text-2xl font-bold">{stats.totalUsers}</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6 bg-white/10 border-white/20 backdrop-blur-md">
+          <Card className="p-6 hover:shadow-hover transition-all duration-300 border-border/50">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center border border-green-500/30">
-                <Music className="w-6 h-6 text-green-400" />
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
+                <Music className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <p className="text-white/70 text-sm">Total Playlists</p>
-                <p className="text-2xl font-bold text-white">{stats.totalPlaylists}</p>
+                <p className="text-sm text-muted-foreground">Total Playlists</p>
+                <p className="text-2xl font-bold">{stats.totalPlaylists}</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6 bg-white/10 border-white/20 backdrop-blur-md">
+          <Card className="p-6 hover:shadow-hover transition-all duration-300 border-border/50">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center border border-purple-500/30">
-                <Calendar className="w-6 h-6 text-purple-400" />
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-white/70 text-sm">Today</p>
-                <p className="text-2xl font-bold text-white">{stats.playlistsToday}</p>
+                <p className="text-sm text-muted-foreground">Today</p>
+                <p className="text-2xl font-bold">{stats.playlistsToday}</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6 bg-white/10 border-white/20 backdrop-blur-md">
+          <Card className="p-6 hover:shadow-hover transition-all duration-300 border-border/50">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center border border-orange-500/30">
-                <BarChart3 className="w-6 h-6 text-orange-400" />
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <p className="text-white/70 text-sm">This Week</p>
-                <p className="text-2xl font-bold text-white">{stats.playlistsThisWeek}</p>
+                <p className="text-sm text-muted-foreground">This Week</p>
+                <p className="text-2xl font-bold">{stats.playlistsThisWeek}</p>
               </div>
             </div>
           </Card>
         </div>
 
         {/* Recent Playlists Table */}
-        <Card className="p-6 bg-white/10 border-white/20 backdrop-blur-md">
-          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Music className="w-5 h-5" />
+        <Card className="p-6 border-border/50">
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+            <Music className="w-5 h-5 text-primary" />
             Recent Playlists
           </h3>
           
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-white/20 hover:bg-white/5">
-                  <TableHead className="text-white/80">Playlist Name</TableHead>
-                  <TableHead className="text-white/80">User</TableHead>
-                  <TableHead className="text-white/80">Prompt</TableHead>
-                  <TableHead className="text-white/80">Tracks</TableHead>
-                  <TableHead className="text-white/80">Created</TableHead>
+                <TableRow className="border-border hover:bg-muted/50">
+                  <TableHead>Playlist Name</TableHead>
+                  <TableHead>User</TableHead>
+                  <TableHead>Prompt</TableHead>
+                  <TableHead>Tracks</TableHead>
+                  <TableHead>Created</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {recentPlaylists.map((playlist) => (
-                  <TableRow key={playlist.id} className="border-white/10 hover:bg-white/5">
-                    <TableCell className="text-white font-medium">
+                  <TableRow key={playlist.id} className="border-border hover:bg-muted/50">
+                    <TableCell className="font-medium">
                       {playlist.playlist_name}
                     </TableCell>
-                    <TableCell className="text-white/80">
+                    <TableCell className="text-muted-foreground">
                       {playlist.user_email}
                     </TableCell>
-                    <TableCell className="text-white/80 max-w-xs truncate">
+                    <TableCell className="text-muted-foreground max-w-xs truncate">
                       "{playlist.prompt}"
                     </TableCell>
-                    <TableCell className="text-white/80">
+                    <TableCell className="text-muted-foreground">
                       {playlist.track_count}
                     </TableCell>
-                    <TableCell className="text-white/80">
+                    <TableCell className="text-muted-foreground">
                       {format(new Date(playlist.created_at), 'MMM d, HH:mm')}
                     </TableCell>
                   </TableRow>
@@ -280,7 +283,7 @@ const AdminDashboard = () => {
 
           {recentPlaylists.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-white/70">No playlists found</p>
+              <p className="text-muted-foreground">No playlists found</p>
             </div>
           )}
         </Card>
