@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { Music2, Sparkles, ArrowLeft, Loader2, Check, ExternalLink } from "lucide-react";
+import { Music2, Sparkles, ArrowLeft, Loader2, Check, ExternalLink, Brain, Search, Headphones, Wand2, Sparkle } from "lucide-react";
 import { toast } from "sonner";
 
 const CreatePlaylist = () => {
@@ -13,6 +13,15 @@ const CreatePlaylist = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [progress, setProgress] = useState(0);
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+
+  const loadingMessages = [
+    { text: "Analyzing your vibe...", icon: Brain },
+    { text: "Curating perfect tracks...", icon: Search },
+    { text: "Fine-tuning the mood...", icon: Wand2 },
+    { text: "Adding magical touches...", icon: Sparkle },
+    { text: "Almost there...", icon: Headphones },
+  ];
 
   useEffect(() => {
     // Check auth
@@ -29,6 +38,7 @@ const CreatePlaylist = () => {
   useEffect(() => {
     if (loading) {
       setProgress(0);
+      setLoadingMessageIndex(0);
       const interval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 90) {
@@ -41,6 +51,16 @@ const CreatePlaylist = () => {
       return () => clearInterval(interval);
     }
   }, [loading]);
+
+  // Rotate through loading messages
+  useEffect(() => {
+    if (loading && progress > 0) {
+      const messageInterval = setInterval(() => {
+        setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      }, 2000);
+      return () => clearInterval(messageInterval);
+    }
+  }, [loading, progress]);
 
   const handleCreatePlaylist = async () => {
     if (!prompt.trim()) {
@@ -162,16 +182,27 @@ const CreatePlaylist = () => {
 
             {/* Loading Progress */}
             {loading && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Creating your playlist...</span>
-                  <span className="font-medium">{progress}%</span>
+              <div className="space-y-4">
+                <div className="flex items-center justify-center gap-3 animate-in">
+                  {(() => {
+                    const CurrentIcon = loadingMessages[loadingMessageIndex].icon;
+                    return <CurrentIcon className="w-5 h-5 text-primary animate-pulse" />;
+                  })()}
+                  <span className="text-sm font-medium text-foreground">
+                    {loadingMessages[loadingMessageIndex].text}
+                  </span>
                 </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-warm transition-all duration-500 ease-out"
-                    style={{ width: `${progress}%` }}
-                  ></div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">Progress</span>
+                    <span className="font-medium text-primary">{progress}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-warm transition-all duration-500 ease-out"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             )}
