@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Music2, Sparkles, LogOut, Crown, History, Loader2 } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -76,14 +77,17 @@ const Dashboard = () => {
                 <p className="text-xs text-muted-foreground">Dashboard</p>
               </div>
             </div>
-            <Button 
-              variant="ghost" 
-              onClick={handleLogout}
-              className="gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button 
+                variant="ghost" 
+                onClick={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>

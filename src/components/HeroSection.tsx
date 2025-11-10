@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Music2, Sparkles, ArrowRight, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const HeroSection = () => {
   const navigate = useNavigate();
@@ -74,6 +75,11 @@ export const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
+      {/* Theme Toggle */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       {/* Subtle background */}
       <div className="absolute inset-0 bg-gradient-subtle"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(28,80%,52%,0.05),transparent_50%)]"></div>
