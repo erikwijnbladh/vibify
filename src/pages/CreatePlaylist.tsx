@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { Music2, Sparkles, ArrowLeft, Loader2, Check, ExternalLink, Brain, Search, Headphones, Wand2, Sparkle } from "lucide-react";
+import { Music2, Sparkles, ArrowLeft, Check, ExternalLink, Brain, Search, Headphones, Wand2, Sparkle, Flame } from "lucide-react";
 import { toast } from "sonner";
 
 const CreatePlaylist = () => {
@@ -168,88 +168,119 @@ const CreatePlaylist = () => {
         </div>
 
         <Card className="p-8 shadow-hover border-border/50 mb-8">
-          <div className="space-y-6">
-            <div>
-              <Textarea
-                placeholder="e.g., 'chill indie songs for a rainy Sunday morning' or 'upbeat pop for working out'"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[140px] text-lg resize-none"
-                disabled={loading}
-                aria-label="Playlist mood description"
-              />
+          {loading ? (
+            <div className="py-16 space-y-8 animate-in">
+              {/* Fire Animation Container */}
+              <div className="relative flex justify-center">
+                <div className="relative">
+                  {/* Animated fire icon */}
+                  <div className="relative w-32 h-32 flex items-center justify-center">
+                    <Flame className="w-32 h-32 text-orange-500 animate-pulse absolute" />
+                    <Flame className="w-24 h-24 text-yellow-400 animate-pulse absolute" style={{ animationDelay: '0.15s' }} />
+                    <Flame className="w-16 h-16 text-red-500 animate-pulse absolute" style={{ animationDelay: '0.3s' }} />
+                  </div>
+                  
+                  {/* Rotating loading message icon */}
+                  <div className="absolute inset-0 flex items-center justify-center animate-spin" style={{ animationDuration: '3s' }}>
+                    {(() => {
+                      const CurrentIcon = loadingMessages[loadingMessageIndex].icon;
+                      return <CurrentIcon className="w-8 h-8 text-primary" />;
+                    })()}
+                  </div>
+                </div>
+              </div>
+
+              {/* Loading Message */}
+              <div className="text-center space-y-4">
+                <h3 className="text-2xl font-bold text-gradient animate-pulse">
+                  {loadingMessages[loadingMessageIndex].text}
+                </h3>
+                <p className="text-muted-foreground">
+                  Creating your perfect playlist
+                </p>
+                
+                {/* Progress indicator */}
+                <div className="flex justify-center gap-2 pt-4">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        i <= Math.floor(progress / 20) ? 'bg-primary scale-125' : 'bg-muted'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
+          ) : (
+            <div className="space-y-6">
+              <div>
+                <Textarea
+                  placeholder="e.g., 'chill indie songs for a rainy Sunday morning' or 'upbeat pop for working out'"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="min-h-[140px] text-lg resize-none"
+                  disabled={loading}
+                  aria-label="Playlist mood description"
+                />
+              </div>
 
-            <Button
-              onClick={handleCreatePlaylist}
-              disabled={!prompt.trim() || loading}
-              className="w-full h-12 text-base shadow-soft hover:shadow-hover"
-              size="lg"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  {(() => {
-                    const CurrentIcon = loadingMessages[loadingMessageIndex].icon;
-                    return <CurrentIcon className="w-4 h-4 mr-2 animate-pulse" />;
-                  })()}
-                  <span className="font-semibold">
-                    {loadingMessages[loadingMessageIndex].text}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Generate Playlist
-                </>
-              )}
-            </Button>
+              <Button 
+                onClick={handleCreatePlaylist}
+                disabled={!prompt.trim() || loading}
+                className="w-full h-12 text-base shadow-soft hover:shadow-hover"
+                size="lg"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Generate Playlist
+              </Button>
 
-            {/* Result Display */}
-            {result && (
-              <Card className={`p-6 animate-in ${result.success ? 'border-primary/30 bg-primary/5' : 'border-destructive/30 bg-destructive/5'}`}>
-                {result.success ? (
-                  <div className="text-center space-y-4">
-                    <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                      <Check className="w-8 h-8 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold mb-1">
-                        Playlist Created! 🎉
-                      </h3>
-                      <p className="text-lg font-medium text-primary mb-1">
-                        "{result.playlist.name}"
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {result.playlist.trackCount} tracks • Created by @VibifyMusic
-                      </p>
-                      {result.playlist.description && (
-                        <p className="text-sm text-muted-foreground mt-2">
-                          {result.playlist.description}
+              {/* Result Display */}
+              {result && (
+                <Card className={`p-6 animate-in ${result.success ? 'border-primary/30 bg-primary/5' : 'border-destructive/30 bg-destructive/5'}`}>
+                  {result.success ? (
+                    <div className="text-center space-y-4">
+                      <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
+                        <Check className="w-8 h-8 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold mb-1">
+                          Playlist Created! 🎉
+                        </h3>
+                        <p className="text-lg font-medium text-primary mb-1">
+                          "{result.playlist.name}"
                         </p>
-                      )}
+                        <p className="text-sm text-muted-foreground">
+                          {result.playlist.trackCount} tracks • Created by @VibifyMusic
+                        </p>
+                        {result.playlist.description && (
+                          <p className="text-sm text-muted-foreground mt-2">
+                            {result.playlist.description}
+                          </p>
+                        )}
+                      </div>
+                      <Button 
+                        className="shadow-soft hover:shadow-hover"
+                        onClick={() => window.open(`https://open.spotify.com/playlist/${result.playlist.id}`, '_blank')}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Open in Spotify
+                      </Button>
                     </div>
-                    <Button 
-                      className="shadow-soft hover:shadow-hover"
-                      onClick={() => window.open(`https://open.spotify.com/playlist/${result.playlist.id}`, '_blank')}
-                    >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Open in Spotify
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <h3 className="text-lg font-bold text-destructive mb-2">
-                      Failed to Create Playlist
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {result.error}
-                    </p>
-                  </div>
-                )}
-              </Card>
-            )}
-          </div>
+                  ) : (
+                    <div className="text-center">
+                      <h3 className="text-lg font-bold text-destructive mb-2">
+                        Failed to Create Playlist
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {result.error}
+                      </p>
+                    </div>
+                  )}
+                </Card>
+              )}
+            </div>
+          )}
         </Card>
 
         {/* Examples */}
